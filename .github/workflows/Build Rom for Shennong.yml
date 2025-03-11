@@ -1,49 +1,49 @@
-name: Build ROM for Shennong
-on:
+名字: 为神农建ROM
+在:
   workflow_dispatch:
-    inputs:
-      URL:
-        description: "移植包下载地址"
-        required: true
-        default: 'https://ultimateota.d.miui.com/OS1.1.5.0.VNCCNXM.BETA/houji-ota_full-OS1.1.5.0.VNCCNXM.BETA-user-15.0-870419b89d.zip?t=1728635505&s=72006e6bc556a811c0688f9f2d8c8757'
-      VENDOR_URL:
-        description: "底包下载地址"
-        required: true
-        default: 'https://bn.d.miui.com/OS1.0.50.0.UNBCNXM/miui_SHENNONG_OS1.0.50.0.UNBCNXM_388409ff36_14.0.zip'
+输入:
+统一资源定位系统:
+描述: "https://bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com/OS2.0.1.0.UKOCNXM/lisa-ota_full-OS2.0.1.0.UKOCNXM-user-14.0-2febfe6978.zip"
+所需: 真正的
+默认的: 'https://ultimateota.d.miui.com/OS1.1.5.0.VNCCNXM.BETA/houji-ota_full-OS1.1.5.0.VNCCNXM.BETA-user-15.0-870419b89d.zip?t=1728635505&s=72006e6bc556a811c0688f9f2d8c8757'
+query为空VENDOR_URL:
+描述: "https://www.123912.com/s/UMXmjv-NpdQd"
+所需: 真正的
+默认的: 'https://bn.d.miui.com/OS1.0.50.0.UNBCNXM/miui_SHENNONG_OS1.0.50.0.UNBCNXM_388409ff36_14.0.zip'
 
-jobs:
-  build:
+工作:
+建筑:
     runs-on: ubuntu-latest
-    steps:
-      - name: 最大化构建环境
-        uses: easimon/maximize-build-space@master
-        with:
+步骤:
+      - 名字: 最大化构建环境
+用途: easimon/maximize-build-space@master
+与:
           swap-size-mb: 8192
           root-reserve-mb: 4096
           temp-reserve-mb: 4096
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
-      - name: 检出仓库文件
-        uses: actions/checkout@main
-      - name: 构建 ROM
-        run: |
-          sudo bash "$GITHUB_WORKSPACE"/make.sh "${{ github.event.inputs.URL }}" "${{ github.event.inputs.VENDOR_URL }}" "$GITHUB_ENV" "$GITHUB_WORKSPACE"
-      - name: 处理 ROM
-        run: |
-          mkdir -p "$GITHUB_WORKSPACE"/GithubRelease
-          cd "$GITHUB_WORKSPACE"/GithubRelease
-          sudo split -b 1536M -d "$GITHUB_WORKSPACE"/zip/"${{ env.rom_name }}" "${{ env.rom_name }}"
-          cd "$GITHUB_WORKSPACE"
-          touch file.log
-          echo -e "底包版本: ${{ env.vendor_os_version }}\n底包安全补丁版本: ${{ env.vendor_security_patch }}\n底包基线版本: ${{ env.vendor_base_line}}\n\n移植包版本: ${{ env.port_os_version }}\n移植包安全补丁版本: ${{ env.port_security_patch }}\n移植包基线版本: ${{ env.port_base_line }}" > file.log
-      - name: 上传到 Github Release
-        uses: ncipollo/release-action@main
-        with:
-          artifacts: ${{ github.workspace }}/GithubRelease/*
-          name: "${{ env.port_os_version }}"
-          tag: "${{ env.port_os_version }}"
-          bodyFile: "${{ github.workspace }}/file.log"
-          allowUpdates: true
-          artifactErrorsFailBuild: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - 名字: 检出仓库文件
+用途: actions/checkout@main
+      - 名字: 构建 ROM
+跑: |
+sudo bash "$GITHUB_WORKSPACE"/make.sh "${{ github.event.inputs.URL }}" "${{ github.event.inputs.VENDOR_URL }}" "$GITHUB_ENV" "$GITHUB_WORKSPACE"
+      - 名字: 处理 ROM
+跑: |
+mkdir -p "$GITHUB_WORKSPACE"/GithubRelease
+cd "$GITHUB_WORKSPACE"/GithubRelease
+sudo split -b 1536M -d "$GITHUB_WORKSPACE"/zip/"${{ env.rom_name }}" "${{ env.rom_name }}"
+cd "$GITHUB_WORKSPACE"
+触摸文件
+“echo-e”底包版本：北京地铁{env. vendor_os_version}\n高台：${{env. vendor_security_patch}}\n：{env. vendor_base_line}\n：{env. port_os_version}}}}}}\n：${{env. port_security_patch}}}\n：${env. port_base_line}">log
+      - 名字: 上传到 Github发布
+用途: ncipollo/release-action@main
+与:
+文物: ${{ github.workspace }}/GithubRelease/*
+名字: "${{ env.port_os_version }}"
+标签: "${{ env.port_os_version }}"
+尸体: "${{ github.workspace }}/file.log"
+allowUpdates: 真正的
+artifactErrorsFailBuild: 真正的
+代币: ${{ secrets.GITHUB_TOKEN }}
